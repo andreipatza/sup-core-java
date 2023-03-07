@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 2048MB
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "R@nd0mR@nd0m"
+    url: jdbc:mysql://localhost:3306/sup_core_java_spring_db?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    # show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+storage:
+  location: "/Users/andreipata/Documents/SUP PROJECT/APPS/sup-core-java/storage/"
+
+jwt:
+  secret: $2a$10$QGTTE3XfikkyUSdiICD3iusHFowvQ28mf.mEzezy6/FswcrhCgmJi
