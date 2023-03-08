@@ -60,8 +60,8 @@ public class UserDetailsService {
         }
     }
 
-    public String generateOTP(Long userId) throws Exception {
-        UserDetails existingUser = userDetailsRepository.findById(userId)
+    public String generateOTP(String phoneNumber) throws Exception {
+        UserDetails existingUser = userDetailsRepository.findByUsername(phoneNumber)
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
             existingUser.setPassword(bCryptPasswordEncoder.encode("123456"));
@@ -74,8 +74,8 @@ public class UserDetailsService {
         }
     }
 
-    public String verifyOTP(Long userId, String otp) throws Exception {
-        UserDetails existingUser = userDetailsRepository.findById(userId)
+    public String verifyOTP(String phoneNumber, String otp) throws Exception {
+        UserDetails existingUser = userDetailsRepository.findByUsername(phoneNumber)
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
             if (!bCryptPasswordEncoder.matches(otp, existingUser.getPassword())) {
