@@ -27,121 +27,121 @@ import com.sup.core.exceptions.StorageException;
 @ConfigurationProperties(prefix = "storage")
 public class FileSystemStorageService {
 
-    private String location;
+//     private String location;
 
-    private Path rootLocation;
+//     private Path rootLocation;
 
-    private Date today = new Date();
+//     private Date today = new Date();
 
-    public FileSystemStorageService() {
-    }
+//     public FileSystemStorageService() {
+//     }
 
-    @PostConstruct
-    public void init() {
-        try {
-            rootLocation = Paths.get(location);
-            Files.createDirectories(rootLocation);
-        } catch (IOException e) {
-            throw new StorageException("Could not initialize storage location", e);
-        }
-    }
+//     @PostConstruct
+//     public void init() {
+//         try {
+//             rootLocation = Paths.get(location);
+//             Files.createDirectories(rootLocation);
+//         } catch (IOException e) {
+//             throw new StorageException("Could not initialize storage location", e);
+//         }
+//     }
 
-    public String getLocation() {
-        return location;
-    }
+//     public String getLocation() {
+//         return location;
+//     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+//     public void setLocation(String location) {
+//         this.location = location;
+//     }
 
-    public String getRandomFilename() {
-        today = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss-SSS");
-        return sdf.format(today);
-    }
+//     public String getRandomFilename() {
+//         today = new Date();
+//         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss-SSS");
+//         return sdf.format(today);
+//     }
 
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
-    }
+//     public Path load(String filename) {
+//         return rootLocation.resolve(filename);
+//     }
 
-    public Path loadFromSection(String filename, String section, Long referenceId) {
-        try {
+//     public Path loadFromSection(String filename, String section, Long referenceId) {
+//         try {
 
-            rootLocation = Paths.get(location + File.separator + section + File.separator + referenceId);
+//             rootLocation = Paths.get(location + File.separator + section + File.separator + referenceId);
 
-            return rootLocation.resolve(filename);
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        return rootLocation.resolve(filename);
-    }
+//             return rootLocation.resolve(filename);
+//         } catch (Exception e) {
+//             System.err.println(e);
+//         }
+//         return rootLocation.resolve(filename);
+//     }
 
-    public Resource loadAsResource(String filename, String section) {
-        try {
-            rootLocation = Paths.get(location + File.separator + section);
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new FileNotFoundException("Could not read file: " + filename);
-            }
-        } catch (MalformedURLException e) {
-            throw new FileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
+//     public Resource loadAsResource(String filename, String section) {
+//         try {
+//             rootLocation = Paths.get(location + File.separator + section);
+//             Path file = load(filename);
+//             Resource resource = new UrlResource(file.toUri());
+//             if (resource.exists() || resource.isReadable()) {
+//                 return resource;
+//             } else {
+//                 throw new FileNotFoundException("Could not read file: " + filename);
+//             }
+//         } catch (MalformedURLException e) {
+//             throw new FileNotFoundException("Could not read file: " + filename, e);
+//         }
+//     }
 
-    public Resource loadAsResourceProfilePicture(String filename, String section) {
-        try {
-            rootLocation = Paths.get(location + File.separator + section);
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new FileNotFoundException("Could not read file: " + filename);
-            }
-        } catch (MalformedURLException e) {
-            throw new FileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
+//     public Resource loadAsResourceProfilePicture(String filename, String section) {
+//         try {
+//             rootLocation = Paths.get(location + File.separator + section);
+//             Path file = load(filename);
+//             Resource resource = new UrlResource(file.toUri());
+//             if (resource.exists() || resource.isReadable()) {
+//                 return resource;
+//             } else {
+//                 throw new FileNotFoundException("Could not read file: " + filename);
+//             }
+//         } catch (MalformedURLException e) {
+//             throw new FileNotFoundException("Could not read file: " + filename, e);
+//         }
+//     }
 
-    public String getFileExtension(MultipartFile multipartFile) {
-        return FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-    }
+//     public String getFileExtension(MultipartFile multipartFile) {
+//         return FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+//     }
 
-    public String storeFileTest(MultipartFile file) {
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//     public String storeFileTest(MultipartFile file) {
+//         // Normalize file name
+//         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-        try {
-            // Check if the file's name contains invalid characters
-            if (fileName.contains("..")) {
-                throw new StorageException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
+//         try {
+//             // Check if the file's name contains invalid characters
+//             if (fileName.contains("..")) {
+//                 throw new StorageException("Sorry! Filename contains invalid path sequence " + fileName);
+//             }
 
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.rootLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+//             // Copy file to the target location (Replacing existing file with the same name)
+//             Path targetLocation = this.rootLocation.resolve(fileName);
+//             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return fileName;
-        } catch (IOException ex) {
-            throw new StorageException("Could not store file " + fileName + ". Please try again!", ex);
-        }
-    }
+//             return fileName;
+//         } catch (IOException ex) {
+//             throw new StorageException("Could not store file " + fileName + ". Please try again!", ex);
+//         }
+//     }
 
-    public Resource loadAsResourceAudioFile(String filename, String section) {
-        try {
-            rootLocation = Paths.get(location + File.separator);
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new FileNotFoundException("Could not read file: " + filename);
-            }
-        } catch (MalformedURLException e) {
-            throw new FileNotFoundException("Could not read file: " + filename, e);
-        }
-    }
+//     public Resource loadAsResourceAudioFile(String filename, String section) {
+//         try {
+//             rootLocation = Paths.get(location + File.separator);
+//             Path file = load(filename);
+//             Resource resource = new UrlResource(file.toUri());
+//             if (resource.exists() || resource.isReadable()) {
+//                 return resource;
+//             } else {
+//                 throw new FileNotFoundException("Could not read file: " + filename);
+//             }
+//         } catch (MalformedURLException e) {
+//             throw new FileNotFoundException("Could not read file: " + filename, e);
+//         }
+//     }
 }
