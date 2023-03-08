@@ -44,13 +44,13 @@ public class UserDetailsController {
     }
 
     @RequestMapping(value = "/generate-otp", method = RequestMethod.POST)
-    public ResponseEntity<?> generateOTP(@RequestParam Long userId) throws Exception {
-        return ResponseEntity.ok(userDetailsService.generateOTP(userId));
+    public ResponseEntity<?> generateOTP(@RequestParam String phoneNumber) throws Exception {
+        return ResponseEntity.ok(userDetailsService.generateOTP(phoneNumber));
     }
 
     @RequestMapping(value = "/verify-otp", method = RequestMethod.POST)
-    public ResponseEntity<?> verifyOTP(@RequestParam Long userId, @RequestParam String otp) throws Exception {
-        return ResponseEntity.ok(userDetailsService.verifyOTP(userId, otp));
+    public ResponseEntity<?> verifyOTP(@RequestParam String phoneNumber, @RequestParam String otp) throws Exception {
+        return ResponseEntity.ok(userDetailsService.verifyOTP(phoneNumber, otp));
     }
 
 }
