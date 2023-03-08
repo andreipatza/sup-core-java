@@ -24,8 +24,8 @@ spring:
     pathmatch:
       matching-strategy: ant-path-matcher
 
-storage:
-  location: "/Users/andreipata/Documents/SUP PROJECT/APPS/sup-core-java/storage/"
+# storage:
+#   location: "/Users/andreipata/Documents/SUP PROJECT/APPS/sup-core-java/storage/"
 
 jwt:
   secret: $2a$10$QGTTE3XfikkyUSdiICD3iusHFowvQ28mf.mEzezy6/FswcrhCgmJi
