@@ -11,10 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sup.core.entities.UserDetails;
 import com.sup.core.enums.UserStatus;
+import com.sup.core.models.user.UserDetailsGenerateOTPModel;
 import com.sup.core.models.user.UserDetailsRequestModel;
 import com.sup.core.models.user.UserDetailsResponseModel;
 import com.sup.core.models.user.UserDetailsUpdateRequestModel;
 import com.sup.core.models.user.UserDetailsUpdateResponseModel;
+import com.sup.core.models.user.UserDetailsVerifyOTPModel;
 import com.sup.core.repositories.UserDetailsRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -60,8 +62,8 @@ public class UserDetailsService {
         }
     }
 
-    public String generateOTP(String phoneNumber) throws Exception {
-        UserDetails existingUser = userDetailsRepository.findByUsername(phoneNumber)
+    public String generateOTP(UserDetailsGenerateOTPModel userDetailsGenerateOTPModel) throws Exception {
+        UserDetails existingUser = userDetailsRepository.findByUsername(userDetailsGenerateOTPModel.getPhoneNumber())
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
             existingUser.setPassword(bCryptPasswordEncoder.encode("123456"));
@@ -74,11 +76,11 @@ public class UserDetailsService {
         }
     }
 
-    public String verifyOTP(String phoneNumber, String otp) throws Exception {
-        UserDetails existingUser = userDetailsRepository.findByUsername(phoneNumber)
+    public String verifyOTP(UserDetailsVerifyOTPModel UserDetailsVerifyOTPModel) throws Exception {
+        UserDetails existingUser = userDetailsRepository.findByUsername(UserDetailsVerifyOTPModel.getPhoneNumber())
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
-            if (!bCryptPasswordEncoder.matches(otp, existingUser.getPassword())) {
+            if (!bCryptPasswordEncoder.matches(UserDetailsVerifyOTPModel.getOtp(), existingUser.getPassword())) {
                 throw new Exception("Verification code is invalid!");
             } else {
                 return "Verification code is valid!";

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 
+import com.sup.core.models.user.UserDetailsGenerateOTPModel;
 import com.sup.core.models.user.UserDetailsRequestModel;
 import com.sup.core.models.user.UserDetailsUpdateRequestModel;
+import com.sup.core.models.user.UserDetailsVerifyOTPModel;
 import com.sup.core.services.UserDetailsService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,13 +46,15 @@ public class UserDetailsController {
     }
 
     @RequestMapping(value = "/generate-otp", method = RequestMethod.POST)
-    public ResponseEntity<?> generateOTP(@RequestParam String phoneNumber) throws Exception {
-        return ResponseEntity.ok(userDetailsService.generateOTP(phoneNumber));
+    public ResponseEntity<?> generateOTP(@RequestBody UserDetailsGenerateOTPModel userDetailsGenerateOTPModel)
+            throws Exception {
+        return ResponseEntity.ok(userDetailsService.generateOTP(userDetailsGenerateOTPModel));
     }
 
     @RequestMapping(value = "/verify-otp", method = RequestMethod.POST)
-    public ResponseEntity<?> verifyOTP(@RequestParam String phoneNumber, @RequestParam String otp) throws Exception {
-        return ResponseEntity.ok(userDetailsService.verifyOTP(phoneNumber, otp));
+    public ResponseEntity<?> verifyOTP(@RequestBody UserDetailsVerifyOTPModel userDetailsVerifyOTPModel)
+            throws Exception {
+        return ResponseEntity.ok(userDetailsService.verifyOTP(userDetailsVerifyOTPModel));
     }
 
 }
