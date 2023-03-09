@@ -90,4 +90,21 @@ public class UserDetailsService {
         }
     }
 
+    public String verifyAccount(UserDetailsVerifyOTPModel UserDetailsVerifyOTPModel) throws Exception {
+        UserDetails existingUser = userDetailsRepository.findByUsername(UserDetailsVerifyOTPModel.getPhoneNumber())
+                .orElse(null);
+        if (Objects.nonNull(existingUser)) {
+            if (!bCryptPasswordEncoder.matches(UserDetailsVerifyOTPModel.getOtp(), existingUser.getPassword())) {
+                throw new Exception("Verification code is invalid!");
+            } else {
+                existingUser.setUserStatus(UserStatus.VERIFIED);
+                existingUser.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+                userDetailsRepository.save(existingUser);
+                return "Account was verified!";
+            }
+        } else {
+            throw new Exception("User not found");
+        }
+    }
+
 }

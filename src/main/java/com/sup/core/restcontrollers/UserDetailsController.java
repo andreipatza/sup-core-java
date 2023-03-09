@@ -1,20 +1,14 @@
 package com.sup.core.restcontrollers;
 
-import java.security.Principal;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
 
 import com.sup.core.models.user.UserDetailsGenerateOTPModel;
 import com.sup.core.models.user.UserDetailsRequestModel;
@@ -57,4 +51,9 @@ public class UserDetailsController {
         return ResponseEntity.ok(userDetailsService.verifyOTP(userDetailsVerifyOTPModel));
     }
 
+    @RequestMapping(value = "/verify-account", method = RequestMethod.POST)
+    public ResponseEntity<?> verifyAccount(@RequestBody UserDetailsVerifyOTPModel userDetailsVerifyOTPModel)
+            throws Exception {
+        return ResponseEntity.ok(userDetailsService.verifyAccount(userDetailsVerifyOTPModel));
+    }
 }

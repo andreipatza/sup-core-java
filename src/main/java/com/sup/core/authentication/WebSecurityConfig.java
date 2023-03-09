@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/v2/api-docs", "/user/verify-member-status", "/user/activate-user",
                         "/user/change-password", "/auth/login", "/user/add-member", "/user/create-user",
-                        "/user/generate-otp", "/user/verify-otp")
+                        "/user/generate-otp", "/user/verify-otp", "/user/verify-account")
                 .permitAll().
                 // all other requests need to be authenticated
                 anyRequest().authenticated().and().
