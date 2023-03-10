@@ -54,6 +54,11 @@ public class SupportService {
     }
   }
 
+  public List<SupportCategory> getAllCategories() {
+    List<SupportCategory> categories = supportCategoryRepository.findAll();
+    return categories;
+  }
+
   public List<SupportSubcategory> getCategorySubcategories(Long categoryId) {
     SupportCategory existingCategory = supportCategoryRepository.findById(categoryId).orElse(null);
     if (Objects.nonNull(existingCategory)) {
@@ -79,7 +84,7 @@ public class SupportService {
     SupportCategory existingCategory = supportCategoryRepository.findById(categoryId).orElse(null);
     if (Objects.nonNull(existingCategory)) {
       List<SupportSubcategory> subcategories = supportSubcategoryRepository.findByCategory(existingCategory);
-      if (subcategories.size() > 0) {
+      if (subcategories.size() == 0) {
         supportCategoryRepository.delete(existingCategory);
         return "Category deleted!";
       } else {
@@ -134,7 +139,7 @@ public class SupportService {
     SupportSubcategory existingSubcategory = supportSubcategoryRepository.findById(subcategoryId).orElse(null);
     if (Objects.nonNull(existingSubcategory)) {
       List<SupportArticle> articles = supportArticleRepository.findBySubcategory(existingSubcategory);
-      if (articles.size() > 0) {
+      if (articles.size() == 0) {
         supportSubcategoryRepository.delete(existingSubcategory);
         return "Subcategory delted!";
       } else {

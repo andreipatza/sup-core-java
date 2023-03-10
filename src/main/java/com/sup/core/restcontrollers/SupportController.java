@@ -24,6 +24,7 @@ public class SupportController {
   private final SupportService supportService;
 
   // <======= CATEGORY RELATED =======>
+
   @PostMapping("/create-category")
   public ResponseEntity<?> createCategory(@RequestParam String categoryName) {
     return ResponseEntity.ok(supportService.createCategory(categoryName));
@@ -32,6 +33,11 @@ public class SupportController {
   @GetMapping("/get-category")
   public ResponseEntity<?> getCategory(@RequestParam Long categoryId) {
     return ResponseEntity.ok(supportService.getCategory(categoryId));
+  }
+
+  @GetMapping("/get-all-categories")
+  public ResponseEntity<?> getAllCategories() {
+    return ResponseEntity.ok(supportService.getAllCategories());
   }
 
   @GetMapping("/get-category-subcategories")
@@ -50,6 +56,7 @@ public class SupportController {
   }
 
   // <======= SUBCATEGORY RELATED =======>
+
   @PostMapping("/create-subcategory")
   public ResponseEntity<?> createSubcategory(@RequestParam Long categoryId, @RequestParam String categoryName) {
     return ResponseEntity.ok(supportService.createSubcategory(categoryId, categoryName));
@@ -71,6 +78,7 @@ public class SupportController {
   }
 
   // <======= ARTICLE RELATED =======>
+
   @PostMapping("/create-article")
   public ResponseEntity<?> createArticle(@RequestBody SupportArticleRequestModel supportArticleRequestModel) {
     return ResponseEntity.ok(supportService.createArticle(supportArticleRequestModel));
