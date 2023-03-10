@@ -3,11 +3,15 @@ package com.sup.core.entities;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.sup.core.enums.SlotStatus;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,8 +36,11 @@ public class Slot {
   Locker locker;
 
   Integer identificationNumber;
-  String status;
+
+  @Enumerated(EnumType.STRING)
+  SlotStatus status;
   Boolean isActive;
+
   Timestamp creationDate;
   Timestamp lastUpdate;
 }

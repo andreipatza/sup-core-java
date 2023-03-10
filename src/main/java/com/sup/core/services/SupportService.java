@@ -1,12 +1,10 @@
 package com.sup.core.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.transaction.Transactional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.sup.core.entities.SupportArticle;

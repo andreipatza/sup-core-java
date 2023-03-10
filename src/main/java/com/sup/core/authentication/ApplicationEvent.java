@@ -6,7 +6,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.sup.core.entities.UserDetails;
-import com.sup.core.enums.Role;
 import com.sup.core.enums.UserStatus;
 import com.sup.core.repositories.UserDetailsRepository;
 
