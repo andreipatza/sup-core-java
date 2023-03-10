@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SupportArticleRequestModel {
-  Long id;
   Long subcategoryId;
   String title;
   String content;
