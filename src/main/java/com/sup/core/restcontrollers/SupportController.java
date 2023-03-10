@@ -25,81 +25,81 @@ public class SupportController {
 
   // <======= CATEGORY RELATED =======>
 
-  @PostMapping("/create-category")
+  @PostMapping("/category/create-category")
   public ResponseEntity<?> createCategory(@RequestParam String categoryName) {
     return ResponseEntity.ok(supportService.createCategory(categoryName));
   }
 
-  @GetMapping("/get-category")
+  @GetMapping("/category/get-category")
   public ResponseEntity<?> getCategory(@RequestParam Long categoryId) {
     return ResponseEntity.ok(supportService.getCategory(categoryId));
   }
 
-  @GetMapping("/get-all-categories")
+  @GetMapping("/category/get-all-categories")
   public ResponseEntity<?> getAllCategories() {
     return ResponseEntity.ok(supportService.getAllCategories());
   }
 
-  @GetMapping("/get-category-subcategories")
+  @GetMapping("/category/get-category-subcategories")
   public ResponseEntity<?> getCategorySubcategories(@RequestParam Long categoryId) {
     return ResponseEntity.ok(supportService.getCategorySubcategories(categoryId));
   }
 
-  @PutMapping("/edit-category")
+  @PutMapping("/category/edit-category")
   public ResponseEntity<?> editCategory(@RequestParam Long categoryId, @RequestParam String newCategoryName) {
     return ResponseEntity.ok(supportService.editCategory(categoryId, newCategoryName));
   }
 
-  @DeleteMapping("/delete-category")
+  @DeleteMapping("/category/delete-category")
   public ResponseEntity<?> deleteCategory(@RequestParam Long categoryId) {
     return ResponseEntity.ok(supportService.deleteCategory(categoryId));
   }
 
   // <======= SUBCATEGORY RELATED =======>
 
-  @PostMapping("/create-subcategory")
+  @PostMapping("/subcategory/create-subcategory")
   public ResponseEntity<?> createSubcategory(@RequestParam Long categoryId, @RequestParam String categoryName) {
     return ResponseEntity.ok(supportService.createSubcategory(categoryId, categoryName));
   }
 
-  @GetMapping("/get-subcategory")
+  @GetMapping("/subcategory/get-subcategory")
   public ResponseEntity<?> getSubcategory(@RequestParam Long subcategoryId) {
     return ResponseEntity.ok(supportService.getSubcategory(subcategoryId));
   }
 
-  @PutMapping("/edit-subcategory")
+  @PutMapping("/subcategory/edit-subcategory")
   public ResponseEntity<?> editSubcategory(@RequestParam Long subcategoryId, @RequestParam String newSubcategoryName) {
     return ResponseEntity.ok(supportService.editSubcategory(subcategoryId, newSubcategoryName));
   }
 
-  @DeleteMapping("/delete-subcategory")
+  @DeleteMapping("/subcategory/delete-subcategory")
   public ResponseEntity<?> deleteSubcategory(@RequestParam Long subcategoryId) {
     return ResponseEntity.ok(supportService.deleteSubcategory(subcategoryId));
   }
 
   // <======= ARTICLE RELATED =======>
 
-  @PostMapping("/create-article")
+  @PostMapping("/article/create-article")
   public ResponseEntity<?> createArticle(@RequestBody SupportArticleRequestModel supportArticleRequestModel) {
     return ResponseEntity.ok(supportService.createArticle(supportArticleRequestModel));
   }
 
-  @GetMapping("/get-article")
+  @GetMapping("/article/get-article")
   public ResponseEntity<?> getArticle(@RequestParam Long articleId) {
     return ResponseEntity.ok(supportService.getArticle(articleId));
   }
 
-  @GetMapping("/get-subcategory-articles")
+  @GetMapping("/article/get-subcategory-articles")
   public ResponseEntity<?> getArticlesBySubcategory(@RequestParam Long subcategoryId) {
     return ResponseEntity.ok(supportService.getArticlesBySubcategory(subcategoryId));
   }
 
-  @PutMapping("/edit-article")
+  @PutMapping("/article/edit-article")
   public ResponseEntity<?> editArticle(@RequestBody SupportArticleUpdateRequestModel supportArticleRequestModel) {
     return ResponseEntity.ok(supportService.editArticle(supportArticleRequestModel));
   }
 
-  @DeleteMapping("/delete-article")
+  @DeleteMapping("/article/delete-article")
   public ResponseEntity<?> deleteArticle(@RequestParam Long articleId) {
     return ResponseEntity.ok(supportService.deleteArticle(articleId));
   }
