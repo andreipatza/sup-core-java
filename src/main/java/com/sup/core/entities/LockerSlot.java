@@ -1,11 +1,13 @@
 package com.sup.core.entities;
 
-import javax.persistence.Column;
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,18 +22,18 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class SupportArticle {
-
+public class LockerSlot {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
 
-  @OneToOne
-  SupportSubcategory subcategory;
+  @ManyToOne
+  @JoinColumn(name = "locker_id")
+  Locker user;
 
-  String title;
-
-  @Column(columnDefinition = "TEXT")
-  String content;
+  @ManyToOne
+  @JoinColumn(name = "slot_id")
+  Slot slot;
+  Timestamp creationDate;
+  Timestamp lastUpdate;
 }
