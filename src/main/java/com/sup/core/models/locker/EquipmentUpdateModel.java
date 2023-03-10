@@ -1,4 +1,4 @@
-package com.sup.core.models.slot;
+package com.sup.core.models.locker;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SlotRequestModel {
-  Long lockerId;
+public class EquipmentUpdateModel {
+  Long id;
+  Long slotId;
   Integer identificationNumber;
+  String type;
+  Boolean isActive;
+  String status;
 }

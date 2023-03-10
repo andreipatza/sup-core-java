@@ -1,4 +1,4 @@
-package com.sup.core.models.slot;
+package com.sup.core.models.locker;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

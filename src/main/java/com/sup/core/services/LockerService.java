@@ -6,16 +6,18 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.collections4.TrieUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.sup.core.entities.Equipment;
 import com.sup.core.entities.Locker;
 import com.sup.core.entities.Slot;
+import com.sup.core.models.locker.EquipmentRequestModel;
+import com.sup.core.models.locker.EquipmentUpdateModel;
 import com.sup.core.models.locker.LockerRequestModel;
 import com.sup.core.models.locker.LockerUpdateRequestModel;
-import com.sup.core.models.slot.SlotRequestModel;
-import com.sup.core.models.slot.SlotUpdateRequestModel;
+import com.sup.core.models.locker.SlotRequestModel;
+import com.sup.core.models.locker.SlotUpdateRequestModel;
 import com.sup.core.repositories.EquipmentRepository;
 import com.sup.core.repositories.LockerRepository;
 import com.sup.core.repositories.LockerSlotRepository;
@@ -63,6 +65,16 @@ public class LockerService {
     return lockers;
   }
 
+  public List<Slot> getLockerSlots(Long lockerId) {
+    Locker existingLocker = lockerRepository.findById(lockerId).orElse(null);
+    if (Objects.nonNull(existingLocker)) {
+      List<Slot> lockerSlots = slotRepository.findByLocker(existingLocker);
+      return lockerSlots;
+    } else {
+      throw new RuntimeException("There is no locker with provided lockerId!");
+    }
+  }
+
   public Locker editLocker(LockerUpdateRequestModel lockerUpdateRequestModel) {
     Locker existingLocker = lockerRepository.findById(lockerUpdateRequestModel.getId()).orElse(null);
     if (Objects.nonNull(existingLocker)) {
@@ -105,6 +117,8 @@ public class LockerService {
       Slot newSlot = modelMapper.map(slotRequestModel, Slot.class);
       newSlot.setCreationDate(new Timestamp(System.currentTimeMillis()));
       newSlot.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+      newSlot.setLocker(existingLocker);
+      newSlot = slotRepository.save(newSlot);
       return newSlot;
     } else {
       throw new RuntimeException("There is no locker with provided lockerId!");
@@ -120,13 +134,13 @@ public class LockerService {
     }
   }
 
-  public List<Slot> getLockerSlots(Long lockerId) {
-    Locker existingLocker = lockerRepository.findById(lockerId).orElse(null);
-    if (Objects.nonNull(existingLocker)) {
-      List<Slot> lockerSlots = slotRepository.findByLocker(existingLocker);
-      return lockerSlots;
+  public List<Equipment> getSlotEquipments(Long slotId) {
+    Slot existingSlot = slotRepository.findById(slotId).orElse(null);
+    if (Objects.nonNull(existingSlot)) {
+      List<Equipment> equipments = equipmentRepository.findBySlot(existingSlot);
+      return equipments;
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new RuntimeException("There is no slot with provided slotId!");
     }
   }
 
@@ -137,6 +151,7 @@ public class LockerService {
       if (Objects.nonNull(existingSlot)) {
         var updatedSlot = modelMapper.map(slotUpdateRequestModel, Slot.class);
         updatedSlot.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+        updatedSlot.setLocker(existingLocker);
         updatedSlot = slotRepository.save(updatedSlot);
         return updatedSlot;
       } else {
@@ -166,6 +181,70 @@ public class LockerService {
       return "Slot is now inactive!";
     } else {
       throw new RuntimeException("There is no locker with provided lockerId!");
+    }
+  }
+
+  // <======= EQUIPMENT RELATED =======>
+
+  public Equipment createEquipment(EquipmentRequestModel equipmentRequestModel) {
+    Slot existingSlot = slotRepository.findById(equipmentRequestModel.getSlotId()).orElse(null);
+    if (Objects.nonNull(existingSlot)) {
+      Equipment newEquipment = modelMapper.map(equipmentRequestModel, Equipment.class);
+      newEquipment.setCreationDate(new Timestamp(System.currentTimeMillis()));
+      newEquipment.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+      newEquipment.setSlot(existingSlot);
+      return newEquipment;
+    } else {
+      throw new RuntimeException("There is no slot with provided slotId!");
+    }
+  }
+
+  public Equipment getEquipment(Long equipmentId) {
+    Equipment existingEquipment = equipmentRepository.findById(equipmentId).orElse(null);
+    if (Objects.nonNull(existingEquipment)) {
+      return existingEquipment;
+    } else {
+      throw new RuntimeException("There is no equipment with provided equipmentId!");
+    }
+  }
+
+  public Equipment editEquipment(EquipmentUpdateModel equipmentUpdateModel) {
+    Slot existingSlot = slotRepository.findById(equipmentUpdateModel.getSlotId()).orElse(null);
+    Equipment existingEquipment = equipmentRepository.findById(equipmentUpdateModel.getId()).orElse(null);
+    if (Objects.nonNull(existingSlot)) {
+      if (Objects.nonNull(existingEquipment)) {
+        var updatedEquipment = modelMapper.map(equipmentUpdateModel, Equipment.class);
+        updatedEquipment.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+        updatedEquipment.setSlot(existingSlot);
+        updatedEquipment = equipmentRepository.save(updatedEquipment);
+        return updatedEquipment;
+      } else {
+        throw new RuntimeException("There is no equipment with provided id!");
+      }
+    } else {
+      throw new RuntimeException("There is no slot with provided slotId!");
+    }
+  }
+
+  public String activateEquipment(Long equipmentId) {
+    Equipment existingEquipment = equipmentRepository.findById(equipmentId).orElse(null);
+    if (Objects.nonNull(existingEquipment)) {
+      existingEquipment.setIsActive(true);
+      existingEquipment = equipmentRepository.save(existingEquipment);
+      return "Equipment is now active!";
+    } else {
+      throw new RuntimeException("There is no equipment with provided equipmentId!");
+    }
+  }
+
+  public String deactivateEquipment(Long equipmentId) {
+    Equipment existingEquipment = equipmentRepository.findById(equipmentId).orElse(null);
+    if (Objects.nonNull(existingEquipment)) {
+      existingEquipment.setIsActive(false);
+      existingEquipment = equipmentRepository.save(existingEquipment);
+      return "Equipment is now inactive!";
+    } else {
+      throw new RuntimeException("There is no equipment with provided equipmentId!");
     }
   }
 

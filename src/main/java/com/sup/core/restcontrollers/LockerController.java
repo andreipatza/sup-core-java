@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sup.core.models.locker.EquipmentRequestModel;
+import com.sup.core.models.locker.EquipmentUpdateModel;
 import com.sup.core.models.locker.LockerRequestModel;
 import com.sup.core.models.locker.LockerUpdateRequestModel;
-import com.sup.core.models.slot.SlotRequestModel;
-import com.sup.core.models.slot.SlotUpdateRequestModel;
+import com.sup.core.models.locker.SlotRequestModel;
+import com.sup.core.models.locker.SlotUpdateRequestModel;
 import com.sup.core.services.LockerService;
 
 import lombok.RequiredArgsConstructor;
@@ -70,6 +72,11 @@ public class LockerController {
   }
 
   @GetMapping("/slot/get-slot")
+  public ResponseEntity<?> getSlotEquipments(@RequestParam Long slotId) {
+    return ResponseEntity.ok(lockerService.getSlotEquipments(slotId));
+  }
+
+  @GetMapping("/slot/get-slot-equipments")
   public ResponseEntity<?> getSlot(@RequestParam Long slotId) {
     return ResponseEntity.ok(lockerService.getSlot(slotId));
   }
@@ -87,6 +94,33 @@ public class LockerController {
   @PutMapping("/slot/activate-slot")
   public ResponseEntity<?> activateSlot(@RequestParam Long slotId) {
     return ResponseEntity.ok(lockerService.activateSlot(slotId));
+  }
+
+  // <======= EQUIPMENT RELATED =======>
+
+  @PostMapping("/equipment/create-equipment")
+  public ResponseEntity<?> createEquipment(@RequestBody EquipmentRequestModel equipmentRequestModel) {
+    return ResponseEntity.ok(lockerService.createEquipment(equipmentRequestModel));
+  }
+
+  @GetMapping("/equipment/get-equipment")
+  public ResponseEntity<?> getEquipment(@RequestParam Long equipmentId) {
+    return ResponseEntity.ok(lockerService.getEquipment(equipmentId));
+  }
+
+  @PutMapping("/equipment/edit-equipment")
+  public ResponseEntity<?> editEquipment(@RequestBody EquipmentUpdateModel equipmentUpdateModel) {
+    return ResponseEntity.ok(lockerService.editEquipment(equipmentUpdateModel));
+  }
+
+  @DeleteMapping("/equipment/delete-equipment")
+  public ResponseEntity<?> deactivateEquipment(@RequestParam Long equipmentId) {
+    return ResponseEntity.ok(lockerService.deactivateEquipment(equipmentId));
+  }
+
+  @PutMapping("/equipment/activate-equipment")
+  public ResponseEntity<?> activateEquipment(@RequestParam Long equipmentId) {
+    return ResponseEntity.ok(lockerService.activateEquipment(equipmentId));
   }
 
 }

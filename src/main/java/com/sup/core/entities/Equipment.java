@@ -3,11 +3,16 @@ package com.sup.core.entities;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.sup.core.enums.EquipmentStatus;
+import com.sup.core.enums.EquipmentType;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,9 +38,14 @@ public class Equipment {
   Slot slot;
 
   Integer identificationNumber;
-  String type;
+
+  @Enumerated(EnumType.STRING)
+  EquipmentType type;
+
   Boolean isActive;
-  String status;
+  @Enumerated(EnumType.STRING)
+  EquipmentStatus status;
+
   Timestamp creationDate;
   Timestamp lastUpdate;
 }
