@@ -29,37 +29,37 @@ public class LockerController {
 
   // <======= LOCKER RELATED =======>
 
-  @PostMapping("/create-locker")
+  @PostMapping("/locker/create-locker")
   public ResponseEntity<?> createLocker(@RequestBody LockerRequestModel lockerRequestModel) {
     return ResponseEntity.ok(lockerService.createLocker(lockerRequestModel));
   }
 
-  @GetMapping("/get-locker")
+  @GetMapping("/locker/get-locker")
   public ResponseEntity<?> getLocker(@RequestParam Long lockerId) {
     return ResponseEntity.ok(lockerService.getLocker(lockerId));
   }
 
-  @GetMapping("/get-all-lockers")
+  @GetMapping("/locker/get-all-lockers")
   public ResponseEntity<?> getAllLockers() {
     return ResponseEntity.ok(lockerService.getAllLockers());
   }
 
-  @GetMapping("/get-locker-slots")
+  @GetMapping("/locker/get-locker-slots")
   public ResponseEntity<?> getLockerSlots(@RequestParam Long lockerId) {
     return ResponseEntity.ok(lockerService.getLockerSlots(lockerId));
   }
 
-  @PutMapping("/edit-locker")
+  @PutMapping("/locker/edit-locker")
   public ResponseEntity<?> editLocker(@RequestBody LockerUpdateRequestModel lockerUpdateRequestModel) {
     return ResponseEntity.ok(lockerService.editLocker(lockerUpdateRequestModel));
   }
 
-  @PutMapping("/activate-locker")
+  @PutMapping("/locker/activate-locker")
   public ResponseEntity<?> activateLocker(@RequestParam Long lockerId) {
     return ResponseEntity.ok(lockerService.activateLocker(lockerId));
   }
 
-  @DeleteMapping("/delete-locker")
+  @DeleteMapping("/locker/delete-locker")
   public ResponseEntity<?> deactivateLocker(@RequestParam Long lockerId) {
     return ResponseEntity.ok(lockerService.deactivateLocker(lockerId));
   }

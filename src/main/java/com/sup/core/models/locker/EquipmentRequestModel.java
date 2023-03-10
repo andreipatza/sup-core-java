@@ -1,5 +1,11 @@
 package com.sup.core.models.locker;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.print.DocFlavor.STRING;
+
+import com.sup.core.enums.EquipmentType;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,5 +19,7 @@ import lombok.experimental.FieldDefaults;
 public class EquipmentRequestModel {
   Long slotId;
   Integer identificationNumber;
-  String type;
+
+  @Enumerated(EnumType.STRING)
+  EquipmentType type;
 }

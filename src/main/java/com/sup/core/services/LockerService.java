@@ -7,11 +7,16 @@ import java.util.Objects;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.sup.core.entities.Equipment;
 import com.sup.core.entities.Locker;
 import com.sup.core.entities.Slot;
+import com.sup.core.enums.EquipmentStatus;
+import com.sup.core.enums.LockerStatus;
+import com.sup.core.enums.SlotStatus;
+import com.sup.core.exceptions.SupCoreException;
 import com.sup.core.models.locker.EquipmentRequestModel;
 import com.sup.core.models.locker.EquipmentUpdateModel;
 import com.sup.core.models.locker.LockerRequestModel;
@@ -47,6 +52,8 @@ public class LockerService {
     Locker newLocker = modelMapper.map(lockerRequestModel, Locker.class);
     newLocker.setCreationDate(new Timestamp(System.currentTimeMillis()));
     newLocker.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+    newLocker.setIsActive(true);
+    newLocker.setStatus(LockerStatus.NOT_WORKING);
     newLocker = lockerRepository.save(newLocker);
     return newLocker;
   }
@@ -56,12 +63,12 @@ public class LockerService {
     if (Objects.nonNull(locker)) {
       return locker;
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
   public List<Locker> getAllLockers() {
-    List<Locker> lockers = lockerRepository.findAll();
+    List<Locker> lockers = lockerRepository.findByIsActive(true);
     return lockers;
   }
 
@@ -71,7 +78,7 @@ public class LockerService {
       List<Slot> lockerSlots = slotRepository.findByLocker(existingLocker);
       return lockerSlots;
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -79,11 +86,12 @@ public class LockerService {
     Locker existingLocker = lockerRepository.findById(lockerUpdateRequestModel.getId()).orElse(null);
     if (Objects.nonNull(existingLocker)) {
       var locker = modelMapper.map(lockerUpdateRequestModel, Locker.class);
+      locker.setCreationDate(existingLocker.getCreationDate());
       locker.setLastUpdate(new Timestamp(System.currentTimeMillis()));
       locker = lockerRepository.save(locker);
       return locker;
     } else {
-      throw new RuntimeException("There is no locker with provided id!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided id!");
     }
   }
 
@@ -94,7 +102,7 @@ public class LockerService {
       locker = lockerRepository.save(locker);
       return "Locker is now active!";
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -105,7 +113,7 @@ public class LockerService {
       existingLocker = lockerRepository.save(existingLocker);
       return "Locker is now inactive!";
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -114,14 +122,17 @@ public class LockerService {
   public Slot createSlot(SlotRequestModel slotRequestModel) {
     Locker existingLocker = lockerRepository.findById(slotRequestModel.getLockerId()).orElse(null);
     if (Objects.nonNull(existingLocker)) {
-      Slot newSlot = modelMapper.map(slotRequestModel, Slot.class);
+      Slot newSlot = new Slot();
+      newSlot.setLocker(existingLocker);
+      newSlot.setIdentificationNumber(slotRequestModel.getIdentificationNumber());
+      newSlot.setIsActive(true);
+      newSlot.setStatus(SlotStatus.UNAVAILABLE);
       newSlot.setCreationDate(new Timestamp(System.currentTimeMillis()));
       newSlot.setLastUpdate(new Timestamp(System.currentTimeMillis()));
-      newSlot.setLocker(existingLocker);
       newSlot = slotRepository.save(newSlot);
       return newSlot;
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -130,7 +141,7 @@ public class LockerService {
     if (Objects.nonNull(newSlot)) {
       return newSlot;
     } else {
-      throw new RuntimeException("There is no slot with provided slotId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no slot with provided slotId!");
     }
   }
 
@@ -140,7 +151,7 @@ public class LockerService {
       List<Equipment> equipments = equipmentRepository.findBySlot(existingSlot);
       return equipments;
     } else {
-      throw new RuntimeException("There is no slot with provided slotId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no slot with provided slotId!");
     }
   }
 
@@ -150,15 +161,16 @@ public class LockerService {
     if (Objects.nonNull(existingLocker)) {
       if (Objects.nonNull(existingSlot)) {
         var updatedSlot = modelMapper.map(slotUpdateRequestModel, Slot.class);
+        updatedSlot.setCreationDate(existingSlot.getCreationDate());
         updatedSlot.setLastUpdate(new Timestamp(System.currentTimeMillis()));
         updatedSlot.setLocker(existingLocker);
         updatedSlot = slotRepository.save(updatedSlot);
         return updatedSlot;
       } else {
-        throw new RuntimeException("There is no slot with provided slotId!");
+        throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no slot with provided slotId!");
       }
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -169,7 +181,7 @@ public class LockerService {
       existingSlot = slotRepository.save(existingSlot);
       return "Slot is now active!";
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -180,7 +192,7 @@ public class LockerService {
       existingSlot = slotRepository.save(existingSlot);
       return "Slot is now inactive!";
     } else {
-      throw new RuntimeException("There is no locker with provided lockerId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no locker with provided lockerId!");
     }
   }
 
@@ -189,13 +201,18 @@ public class LockerService {
   public Equipment createEquipment(EquipmentRequestModel equipmentRequestModel) {
     Slot existingSlot = slotRepository.findById(equipmentRequestModel.getSlotId()).orElse(null);
     if (Objects.nonNull(existingSlot)) {
-      Equipment newEquipment = modelMapper.map(equipmentRequestModel, Equipment.class);
+      Equipment newEquipment = new Equipment();
       newEquipment.setCreationDate(new Timestamp(System.currentTimeMillis()));
       newEquipment.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+      newEquipment.setIsActive(true);
+      newEquipment.setStatus(EquipmentStatus.UNAVAILABLE);
       newEquipment.setSlot(existingSlot);
+      newEquipment.setType(equipmentRequestModel.getType());
+      newEquipment.setIdentificationNumber(equipmentRequestModel.getIdentificationNumber());
+      newEquipment = equipmentRepository.save(newEquipment);
       return newEquipment;
     } else {
-      throw new RuntimeException("There is no slot with provided slotId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no slot with provided slotId!");
     }
   }
 
@@ -204,7 +221,7 @@ public class LockerService {
     if (Objects.nonNull(existingEquipment)) {
       return existingEquipment;
     } else {
-      throw new RuntimeException("There is no equipment with provided equipmentId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no equipment with provided equipmentId!");
     }
   }
 
@@ -214,15 +231,16 @@ public class LockerService {
     if (Objects.nonNull(existingSlot)) {
       if (Objects.nonNull(existingEquipment)) {
         var updatedEquipment = modelMapper.map(equipmentUpdateModel, Equipment.class);
+        updatedEquipment.setCreationDate(new Timestamp(System.currentTimeMillis()));
         updatedEquipment.setLastUpdate(new Timestamp(System.currentTimeMillis()));
         updatedEquipment.setSlot(existingSlot);
         updatedEquipment = equipmentRepository.save(updatedEquipment);
         return updatedEquipment;
       } else {
-        throw new RuntimeException("There is no equipment with provided id!");
+        throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no equipment with provided id!");
       }
     } else {
-      throw new RuntimeException("There is no slot with provided slotId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no slot with provided slotId!");
     }
   }
 
@@ -233,7 +251,7 @@ public class LockerService {
       existingEquipment = equipmentRepository.save(existingEquipment);
       return "Equipment is now active!";
     } else {
-      throw new RuntimeException("There is no equipment with provided equipmentId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no equipment with provided equipmentId!");
     }
   }
 
@@ -244,7 +262,7 @@ public class LockerService {
       existingEquipment = equipmentRepository.save(existingEquipment);
       return "Equipment is now inactive!";
     } else {
-      throw new RuntimeException("There is no equipment with provided equipmentId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no equipment with provided equipmentId!");
     }
   }
 

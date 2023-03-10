@@ -8,16 +8,16 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SpeechPlatformException extends SpeechInternalException {
+public class SupCoreException extends SupCoreInternalException {
 
     HttpStatus status;
 
-    public SpeechPlatformException(HttpStatus status, String message) {
+    public SupCoreException(HttpStatus status, String message) {
         super(message);
         this.status = status;
     }
 
-    public SpeechPlatformException(HttpStatus status, String message, Object... arguments) {
+    public SupCoreException(HttpStatus status, String message, Object... arguments) {
         super(String.format(message, arguments));
         this.status = status;
     }

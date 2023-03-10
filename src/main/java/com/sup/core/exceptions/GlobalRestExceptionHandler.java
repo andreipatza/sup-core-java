@@ -56,8 +56,8 @@ public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    @ExceptionHandler({ SpeechPlatformException.class })
-    public ResponseEntity<ApiResponse> handleHiraPlatformException(SpeechPlatformException ex) {
+    @ExceptionHandler({ SupCoreException.class })
+    public ResponseEntity<ApiResponse> handleHiraPlatformException(SupCoreException ex) {
         log.error(ex.getClass().getSimpleName() + ": ", ex);
         ApiResponse error = ApiResponse.builder()
                 .timestamp(Instant.now())

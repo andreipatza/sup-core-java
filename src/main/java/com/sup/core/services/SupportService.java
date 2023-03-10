@@ -5,11 +5,13 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.sup.core.entities.SupportArticle;
 import com.sup.core.entities.SupportCategory;
 import com.sup.core.entities.SupportSubcategory;
+import com.sup.core.exceptions.SupCoreException;
 import com.sup.core.models.support.SupportArticleRequestModel;
 import com.sup.core.models.support.SupportArticleUpdateRequestModel;
 import com.sup.core.repositories.SupportArticleRepository;
@@ -39,7 +41,7 @@ public class SupportService {
       newCategory = supportCategoryRepository.save(newCategory);
       return newCategory;
     } else {
-      throw new RuntimeException("A category with this name already exists!");
+      throw new SupCoreException(HttpStatus.BAD_REQUEST, "A category with this name already exists!");
     }
   }
 
@@ -48,7 +50,7 @@ public class SupportService {
     if (Objects.nonNull(existingCategory)) {
       return existingCategory;
     } else {
-      throw new RuntimeException("There is no category with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no category with provided categoryId!");
     }
   }
 
@@ -63,7 +65,7 @@ public class SupportService {
       List<SupportSubcategory> subcategories = supportSubcategoryRepository.findByCategory(existingCategory);
       return subcategories;
     } else {
-      throw new RuntimeException("There is no category with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no category with provided categoryId!");
     }
   }
 
@@ -74,7 +76,7 @@ public class SupportService {
       supportCategoryRepository.save(existingCategory);
       return existingCategory;
     } else {
-      throw new RuntimeException("There is no category with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no category with provided categoryId!");
     }
   }
 
@@ -86,10 +88,11 @@ public class SupportService {
         supportCategoryRepository.delete(existingCategory);
         return "Category deleted!";
       } else {
-        throw new RuntimeException("The category has subcategories assigned, it cannot be deleted!");
+        throw new SupCoreException(HttpStatus.BAD_REQUEST,
+            "The category has subcategories assigned, it cannot be deleted!");
       }
     } else {
-      throw new RuntimeException("There is no category with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no category with provided categoryId!");
     }
   }
 
@@ -106,10 +109,10 @@ public class SupportService {
         newSubCategory = supportSubcategoryRepository.save(newSubCategory);
         return newSubCategory;
       } else {
-        throw new RuntimeException("A subcategory with this name already exists!");
+        throw new SupCoreException(HttpStatus.BAD_REQUEST, "A subcategory with this name already exists!");
       }
     } else {
-      throw new RuntimeException("There is no subcategory with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no category with provided categoryId!");
     }
   }
 
@@ -118,7 +121,7 @@ public class SupportService {
     if (Objects.nonNull(existingSubcategory)) {
       return existingSubcategory;
     } else {
-      throw new RuntimeException("There is no subcategory with provided subcategoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided subcategoryId!");
     }
   }
 
@@ -129,7 +132,7 @@ public class SupportService {
       supportSubcategoryRepository.save(existingSubcategory);
       return existingSubcategory;
     } else {
-      throw new RuntimeException("There is no subcategory with provided subcategoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided subcategoryId!");
     }
   }
 
@@ -141,10 +144,11 @@ public class SupportService {
         supportSubcategoryRepository.delete(existingSubcategory);
         return "Subcategory delted!";
       } else {
-        throw new RuntimeException("The subcategory has articles assigned, it cannot be deleted!");
+        throw new SupCoreException(HttpStatus.BAD_REQUEST,
+            "The subcategory has articles assigned, it cannot be deleted!");
       }
     } else {
-      throw new RuntimeException("There is no subcategory with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided subcategoryId!");
     }
   }
 
@@ -161,7 +165,7 @@ public class SupportService {
       newArticle = supportArticleRepository.save(newArticle);
       return newArticle;
     } else {
-      throw new RuntimeException("There is no subcategory with provided subcategoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided subcategoryId!");
     }
   }
 
@@ -170,7 +174,7 @@ public class SupportService {
     if (Objects.nonNull(existingArticle)) {
       return existingArticle;
     } else {
-      throw new RuntimeException("There is no article with provided articleId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no article with provided articleId!");
     }
   }
 
@@ -180,7 +184,7 @@ public class SupportService {
       List<SupportArticle> articles = supportArticleRepository.findBySubcategory(existingSubcategory);
       return articles;
     } else {
-      throw new RuntimeException("There is no subcategory with provided categoryId!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided categoryId!");
     }
   }
 
@@ -197,10 +201,10 @@ public class SupportService {
         supportArticleRepository.save(existingArticle);
         return existingArticle;
       } else {
-        throw new RuntimeException("There is no subcategory with provided subcategoryId!");
+        throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no subcategory with provided categoryId!");
       }
     } else {
-      throw new RuntimeException("There is no article with provided id!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no article with provided articleId!");
     }
   }
 
@@ -211,7 +215,7 @@ public class SupportService {
       supportArticleRepository.delete(existingArticle);
       return "Article deleted!";
     } else {
-      throw new RuntimeException("There is no article with provided id!");
+      throw new SupCoreException(HttpStatus.NOT_FOUND, "There is no article with provided articleId!");
     }
   }
 }

@@ -5,12 +5,14 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sup.core.entities.UserDetails;
 import com.sup.core.enums.UserStatus;
+import com.sup.core.exceptions.SupCoreException;
 import com.sup.core.models.user.UserDetailsGenerateOTPModel;
 import com.sup.core.models.user.UserDetailsRequestModel;
 import com.sup.core.models.user.UserDetailsResponseModel;
@@ -44,7 +46,7 @@ public class UserDetailsService {
             userDetailsRepository.save(newUser);
             return modelMapper.map(newUser, UserDetailsResponseModel.class);
         } else {
-            throw new RuntimeException("Phone number already registered!");
+            throw new SupCoreException(HttpStatus.BAD_REQUEST, "Phone number already registered!");
         }
     }
 
@@ -58,7 +60,7 @@ public class UserDetailsService {
             userDetailsRepository.save(existingUser);
             return modelMapper.map(existingUser, UserDetailsUpdateResponseModel.class);
         } else {
-            throw new Exception("User not found");
+            throw new SupCoreException(HttpStatus.NOT_FOUND, "User not found!");
         }
     }
 
@@ -72,7 +74,7 @@ public class UserDetailsService {
 
             return "Verification code was generated!";
         } else {
-            throw new Exception("User not found");
+            throw new SupCoreException(HttpStatus.NOT_FOUND, "User not found!");
         }
     }
 
@@ -81,12 +83,12 @@ public class UserDetailsService {
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
             if (!bCryptPasswordEncoder.matches(UserDetailsVerifyOTPModel.getOtp(), existingUser.getPassword())) {
-                throw new Exception("Verification code is invalid!");
+                throw new SupCoreException(HttpStatus.BAD_REQUEST, "Verification code is invalid!");
             } else {
                 return "Verification code is valid!";
             }
         } else {
-            throw new Exception("User not found");
+            throw new SupCoreException(HttpStatus.NOT_FOUND, "User not found!");
         }
     }
 
@@ -95,7 +97,7 @@ public class UserDetailsService {
                 .orElse(null);
         if (Objects.nonNull(existingUser)) {
             if (!bCryptPasswordEncoder.matches(UserDetailsVerifyOTPModel.getOtp(), existingUser.getPassword())) {
-                throw new Exception("Verification code is invalid!");
+                throw new SupCoreException(HttpStatus.BAD_REQUEST, "Verification code is invalid!");
             } else {
                 existingUser.setUserStatus(UserStatus.VERIFIED);
                 existingUser.setLastUpdate(new Timestamp(System.currentTimeMillis()));
@@ -103,7 +105,7 @@ public class UserDetailsService {
                 return "Account was verified!";
             }
         } else {
-            throw new Exception("User not found");
+            throw new SupCoreException(HttpStatus.NOT_FOUND, "User not found!");
         }
     }
 
