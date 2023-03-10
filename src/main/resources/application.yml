@@ -9,12 +9,12 @@ spring:
       max-request-size: 2048MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: "R@nd0mR@nd0m"
-    url: jdbc:mysql://localhost:3306/sup_core_db?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false
-    # username: b066fbf733f737
-    # password: "c6550fb6"
-    # url: jdbc:mysql://eu-cdbr-west-03.cleardb.net:3306/heroku_4fd28edcdf2cb27?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false
+    # username: root
+    # password: "R@nd0mR@nd0m"
+    # url: jdbc:mysql://localhost:3306/sup_core_db?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false
+    username: b066fbf733f737
+    password: "c6550fb6"
+    url: jdbc:mysql://eu-cdbr-west-03.cleardb.net:3306/heroku_4fd28edcdf2cb27?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false
   jpa:
     defer-datasource-initialization: true
     hibernate:
